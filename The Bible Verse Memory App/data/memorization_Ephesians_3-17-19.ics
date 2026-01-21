@@ -1,0 +1,25 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:Bible Memorization Assistant
+BEGIN:VEVENT
+DESCRIPTION:Continue memorizing Ephesians 3:17-19\n\nProgressively expand your memorization:\n\nT C m m H h i y h t f\, t y\, b r a g i l\, M b f o s t a w a t s w t b a l a h a d a A t k t k l o C\, t y m b f u a t f o G.\nEph --:--
+DTEND:20260210T220655Z
+DTSTART:20260203T220655Z
+SUMMARY:Memorization - Ephesians 3:17-19 (Week 3)
+UID:8ad0595d-f743-4beb-a3dc-c3cd977b6870@bible-memory.local
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Continue memorizing Ephesians 3:17-19\n\nProgressively expand your memorization:\n\nT C m m H h i y h t f\, t y\, b r a g i l\, M b f o s t a w a t s w t b a l a h a d a A t k t k l o C\, t y m b f u a t f o G.\nEph --:--
+DTEND:20260127T220655Z
+DTSTART:20260120T220655Z
+SUMMARY:Memorization - Ephesians 3:17-19 (Week 1)
+UID:1cec073c-378a-49ff-ad1a-8bacd6da8ea9@bible-memory.local
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Continue memorizing Ephesians 3:17-19\n\nProgressively expand your memorization:\n\nT C m m H h i y h t f\, t y\, b r a g i l\, M b f o s t a w a t s w t b a l a h a d a A t k t k l o C\, t y m b f u a t f o G.\nEph --:--
+DTEND:20260203T220655Z
+DTSTART:20260127T220655Z
+SUMMARY:Memorization - Ephesians 3:17-19 (Week 2)
+UID:f052fcb7-4c5d-497b-83c7-e48b9563d18f@bible-memory.local
+END:VEVENT
+END:VCALENDAR

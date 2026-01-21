@@ -1,0 +1,9 @@
+{
+  "start_date": null,
+  "start_time": "06:00",
+  "bible_version": "Recovery Version",
+  "progression_interval_days": 7,
+  "output_preference": "ics_download",
+  "user_email": "user@example.com",
+  "last_updated": "2026-01-20T22:06:53.147594"
+}

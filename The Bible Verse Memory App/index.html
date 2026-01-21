@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Memorization Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .button-group button {
+            width: 100%;
+        }
+
+        .verse-display {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .verse-reference {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .verse-text {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .verse-initials {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            color: #764ba2;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .verse-attribution {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        .preferences-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px;
+            background: #f0f0f0;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .download-link {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .download-link:hover {
+            background: #218838;
+        }
+
+        .book-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .book-list button {
+            width: 100%;
+            padding: 8px;
+            background: white;
+            color: #667eea;
+            border: 1px solid #667eea;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .book-list button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📖 Bible Memorization Assistant</h1>
+            <p>Master scripture memory with progressive daily sessions</p>
+        </header>
+
+        <div class="main-grid">
+            <!-- Left Card: Verse Fetcher -->
+            <div class="card">
+                <h2>Find a Verse</h2>
+                
+                <div id="fetchStatus"></div>
+
+                <div class="tabs">
+                    <button class="tab-button active" onclick="switchTab('byname')">By Name</button>
+                    <button class="tab-button" onclick="switchTab('bylist')">Quick List</button>
+                </div>
+
+                <!-- Tab: By Name -->
+                <div id="byname" class="tab-content active">
+                    <div class="form-group">
+                        <label for="bookName">Book Name:</label>
+                        <input type="text" id="bookName" placeholder="e.g., John, Ephesians, Romans" value="John">
+                    </div>
+
+                    <div class="preferences-grid">
+                        <div class="form-group">
+                            <label for="chapter">Chapter:</label>
+                            <input type="number" id="chapter" min="1" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="verseStart">Verse Start:</label>
+                            <input type="number" id="verseStart" min="1" value="1">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="verseEnd">Verse End (optional):</label>
+                        <input type="number" id="verseEnd" min="1" placeholder="Leave empty for single verse">
+                    </div>
+
+                    <button onclick="fetchVerse()">Fetch Verse</button>
+                </div>
+
+                <!-- Tab: Quick List -->
+                <div id="bylist" class="tab-content">
+                    <p style="margin-bottom: 10px; color: #666;">Click a book to quick-select:</p>
+                    <div class="book-list">
+                        <button onclick="selectBook('Genesis')">Genesis</button>
+                        <button onclick="selectBook('Exodus')">Exodus</button>
+                        <button onclick="selectBook('Psalms')">Psalms</button>
+                        <button onclick="selectBook('Proverbs')">Proverbs</button>
+                        <button onclick="selectBook('Isaiah')">Isaiah</button>
+                        <button onclick="selectBook('Matthew')">Matthew</button>
+                        <button onclick="selectBook('Mark')">Mark</button>
+                        <button onclick="selectBook('Luke')">Luke</button>
+                        <button onclick="selectBook('John')">John</button>
+                        <button onclick="selectBook('Romans')">Romans</button>
+                        <button onclick="selectBook('1 Corinthians')">1 Corinthians</button>
+                        <button onclick="selectBook('Ephesians')">Ephesians</button>
+                        <button onclick="selectBook('Philippians')">Philippians</button>
+                        <button onclick="selectBook('1 Peter')">1 Peter</button>
+                        <button onclick="selectBook('1 John')">1 John</button>
+                        <button onclick="selectBook('Revelation')">Revelation</button>
+                    </div>
+                </div>
+
+                <div id="verseDisplay"></div>
+            </div>
+
+            <!-- Right Card: Create Schedule -->
+            <div class="card">
+                <h2>Create Memorization Schedule</h2>
+                
+                <div id="scheduleStatus"></div>
+
+                <div class="form-group">
+                    <label>Use Current Verse (from left)?</label>
+                    <div class="button-group">
+                        <button onclick="populateFromFetch()" style="background: #28a745;">Yes, Use It</button>
+                        <button onclick="clearSchedule()" style="background: #dc3545;">Enter New</button>
+                    </div>
+                </div>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                <div class="form-group">
+                    <label for="scheduleBook">Book:</label>
+                    <input type="text" id="scheduleBook" placeholder="e.g., Ephesians">
+                </div>
+
+                <div class="preferences-grid">
+                    <div class="form-group">
+                        <label for="scheduleChapter">Chapter:</label>
+                        <input type="number" id="scheduleChapter" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduleVerseStart">Verse Start:</label>
+                        <input type="number" id="scheduleVerseStart" min="1">
+                    </div>
+                </div>
+
+                <div class="preferences-grid">
+                    <div class="form-group">
+                        <label for="scheduleVerseEnd">Verse End:</label>
+                        <input type="number" id="scheduleVerseEnd" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="progressionDays">Progression (days):</label>
+                        <input type="number" id="progressionDays" min="1" value="7">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="outputMethod">Output Method:</label>
+                    <select id="outputMethod">
+                        <option value="ics_download">Download Calendar (.ics)</option>
+                        <option value="email">Email to Me</option>
+                        <option value="both">Both Download & Email</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="scheduleEmail">Email (optional):</label>
+                    <input type="email" id="scheduleEmail" placeholder="your@email.com">
+                </div>
+
+                <button onclick="createSchedule()">Create Schedule</button>
+
+                <div id="scheduleResult"></div>
+            </div>
+        </div>
+
+        <!-- Preferences Section -->
+        <div class="card">
+            <h2>Your Preferences</h2>
+            
+            <div class="preferences-grid">
+                <div class="form-group">
+                    <label for="prefEmail">Email Address:</label>
+                    <input type="email" id="prefEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="prefStartTime">Daily Reminder Time:</label>
+                    <input type="time" id="prefStartTime" value="06:00">
+                </div>
+                <div class="form-group">
+                    <label for="prefInterval">Progression Interval (days):</label>
+                    <input type="number" id="prefInterval" min="1" value="7">
+                </div>
+                <div class="form-group">
+                    <label for="prefVersion">Bible Version:</label>
+                    <select id="prefVersion">
+                        <option value="Recovery Version" selected>Recovery Version</option>
+                        <option value="NKJV">NKJV</option>
+                        <option value="KJV">KJV</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="savePreferences()">Save Preferences</button>
+            <div id="prefStatus"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - Change this when deploying to Netlify
+        const API_BASE_URL = 'http://127.0.0.1:5000';
+        // For Netlify: const API_BASE_URL = 'https://your-backend-url.com';
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Quick select book
+        function selectBook(bookName) {
+            document.getElementById('bookName').value = bookName;
+        }
+
+        // Status message helper
+        function showStatus(elementId, message, type = 'info') {
+            const el = document.getElementById(elementId);
+            el.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => el.innerHTML = '', 5000);
+        }
+
+        // Fetch verse
+        async function fetchVerse() {
+            const book = document.getElementById('bookName').value.trim();
+            const chapter = parseInt(document.getElementById('chapter').value);
+            const verseStart = parseInt(document.getElementById('verseStart').value);
+            const verseEnd = document.getElementById('verseEnd').value ? 
+                parseInt(document.getElementById('verseEnd').value) : verseStart;
+
+            if (!book || !chapter || !verseStart) {
+                showStatus('fetchStatus', 'Please fill in all required fields', 'error');
+                return;
+            }
+
+            showStatus('fetchStatus', '<div class="loading active"><div class="spinner"></div>Fetching verse...</div>', 'info');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/verse`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        book, chapter, verse_start: verseStart, 
+                        verse_end: verseEnd, book_abbr: book.substring(0, 3)
+                    })
+                });
+
+                if (!response.ok) throw new Error('Verse not found');
+                
+                const data = await response.json();
+                displayVerse(data);
+                showStatus('fetchStatus', 'Verse loaded successfully!', 'success');
+                
+                // Auto-populate schedule form
+                populateFromFetch();
+            } catch (error) {
+                showStatus('fetchStatus', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Display verse
+        function displayVerse(data) {
+            const html = `
+                <div class="verse-display">
+                    <div class="verse-reference">${data.verse_reference}</div>
+                    <div class="verse-text"><strong>Full Text:</strong><br>${data.full_text}</div>
+                    <div class="verse-initials"><strong>Memory Aid (Initials):</strong><br>${data.initials}</div>
+                    <div class="verse-attribution">${data.attribution}</div>
+                </div>
+            `;
+            document.getElementById('verseDisplay').innerHTML = html;
+            
+            // Store for schedule
+            window.currentVerse = data;
+        }
+
+        // Populate schedule from fetched verse
+        function populateFromFetch() {
+            if (!window.currentVerse) {
+                showStatus('scheduleStatus', 'Please fetch a verse first', 'error');
+                return;
+            }
+
+            const ref = window.currentVerse.verse_reference;
+            const match = ref.match(/(\w+(?:\s+\d+)?)\s+(\d+):(\d+)(?:-(\d+))?/);
+            
+            if (match) {
+                document.getElementById('scheduleBook').value = match[1];
+                document.getElementById('scheduleChapter').value = match[2];
+                document.getElementById('scheduleVerseStart').value = match[3];
+                document.getElementById('scheduleVerseEnd').value = match[4] || match[3];
+            }
+        }
+
+        // Clear schedule form
+        function clearSchedule() {
+            document.getElementById('scheduleBook').value = '';
+            document.getElementById('scheduleChapter').value = '';
+            document.getElementById('scheduleVerseStart').value = '';
+            document.getElementById('scheduleVerseEnd').value = '';
+            document.getElementById('scheduleResult').innerHTML = '';
+        }
+
+        // Create schedule
+        async function createSchedule() {
+            const book = document.getElementById('scheduleBook').value.trim();
+            const chapter = parseInt(document.getElementById('scheduleChapter').value);
+            const verseStart = parseInt(document.getElementById('scheduleVerseStart').value);
+            const verseEndInput = document.getElementById('scheduleVerseEnd').value.trim();
+            const verseEnd = verseEndInput ? parseInt(verseEndInput) : parseInt(document.getElementById('scheduleVerseStart').value);
+            const progressionDays = parseInt(document.getElementById('progressionDays').value);
+            const outputMethod = document.getElementById('outputMethod').value;
+            const email = document.getElementById('scheduleEmail').value;
+
+            if (!book || !chapter || !verseStart) {
+                showStatus('scheduleStatus', 'Please fill in Book, Chapter, and Verse Start', 'error');
+                return;
+            }
+
+            showStatus('scheduleStatus', '<div class="loading active"><div class="spinner"></div>Creating schedule...</div>', 'info');
+
+            try {
+                const payload = {
+                    book, chapter, 
+                    verse_start: verseStart, verse_end: verseEnd,
+                    progression_days: progressionDays,
+                    output_method: outputMethod
+                };
+                if (email) payload.email = email;
+
+                const response = await fetch(`${API_BASE_URL}/api/schedule`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error('Failed to create schedule');
+                
+                const data = await response.json();
+                showStatus('scheduleStatus', 'Schedule created successfully!', 'success');
+                
+                let resultHtml = `
+                    <div class="verse-display">
+                        <strong>Schedule Created!</strong>
+                        <p style="margin-top: 10px;">
+                            <strong>Verse:</strong> ${data.verse_reference}<br>
+                            <strong>Weeks:</strong> ${data.progression_weeks}<br>
+                            <strong>Interval:</strong> ${data.progression_interval_days} days<br>
+                            <strong>Method:</strong> ${data.output_method}
+                        </p>
+                `;
+                
+                if (data.ics_filename) {
+                    resultHtml += `
+                        <p style="margin-top: 15px;">
+                            <a href="${API_BASE_URL}/download/${data.ics_filename}" class="download-link">
+                                Download Calendar File
+                            </a>
+                        </p>
+                    `;
+                }
+                
+                resultHtml += `</div>`;
+                document.getElementById('scheduleResult').innerHTML = resultHtml;
+            } catch (error) {
+                showStatus('scheduleStatus', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Save preferences
+        async function savePreferences() {
+            const email = document.getElementById('prefEmail').value;
+            const startTime = document.getElementById('prefStartTime').value;
+            const interval = parseInt(document.getElementById('prefInterval').value);
+            const version = document.getElementById('prefVersion').value;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/preferences`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_email: email,
+                        start_time: startTime,
+                        progression_interval_days: interval,
+                        bible_version: version
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to save preferences');
+                
+                showStatus('prefStatus', 'Preferences saved successfully!', 'success');
+            } catch (error) {
+                showStatus('prefStatus', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Load preferences on page load
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/preferences`);
+                const data = await response.json();
+                
+                if (data.user_email) document.getElementById('prefEmail').value = data.user_email;
+                if (data.start_time) document.getElementById('prefStartTime').value = data.start_time;
+                if (data.progression_interval_days) document.getElementById('prefInterval').value = data.progression_interval_days;
+                if (data.bible_version) document.getElementById('prefVersion').value = data.bible_version;
+            } catch (error) {
+                console.log('Could not load preferences');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:Bible Memorization Assistant
+BEGIN:VEVENT
+DESCRIPTION:Continue memorizing John 1:1-3\n\nProgressively expand your memorization:\n\nI t b w t W\, a t W w w G\, a t W w G.\nH w i t b w G.\nA t c i b t H\, a a f H n o t c i b w h c i b.\nJoh --:--
+DTEND:20260127T221351Z
+DTSTART:20260120T221351Z
+SUMMARY:Memorization - John 1:1-3 (Week 1)
+UID:986e19de-06d6-46ec-813e-c780e26f5e37@bible-memory.local
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Continue memorizing John 1:1-3\n\nProgressively expand your memorization:\n\nI t b w t W\, a t W w w G\, a t W w G.\nH w i t b w G.\nA t c i b t H\, a a f H n o t c i b w h c i b.\nJoh --:--
+DTEND:20260203T221351Z
+DTSTART:20260127T221351Z
+SUMMARY:Memorization - John 1:1-3 (Week 2)
+UID:f93676da-4802-4e2d-9701-808e3bfc19a5@bible-memory.local
+END:VEVENT
+BEGIN:VEVENT
+DESCRIPTION:Continue memorizing John 1:1-3\n\nProgressively expand your memorization:\n\nI t b w t W\, a t W w w G\, a t W w G.\nH w i t b w G.\nA t c i b t H\, a a f H n o t c i b w h c i b.\nJoh --:--
+DTEND:20260210T221351Z
+DTSTART:20260203T221351Z
+SUMMARY:Memorization - John 1:1-3 (Week 3)
+UID:8cdc6aac-4e8c-47b7-b8d6-668c38412d86@bible-memory.local
+END:VEVENT
+END:VCALENDAR
